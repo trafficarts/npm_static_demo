@@ -1,6 +1,6 @@
 {
   "name": "@traffic-arts/npm-static-demo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Single-file static HTML page built with Vite",
   "license": "MIT",
   "repository": {
@@ -8,7 +8,8 @@
     "url": "git+https://github.com/trafficarts/npm_static_demo.git"
   },
   "files": [
-    "index.html"
+    "index.html",
+    "README.md"
   ],
   "unpkg": "./index.html",
   "publishConfig": {
