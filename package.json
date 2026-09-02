@@ -1,0 +1,21 @@
+{
+  "name": "@traffic-arts/npm-static-demo",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Traffic Arts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/minify-html.mjs && cp package.publish.json dist/package.json",
+    "preview": "vite preview",
+    "pack:check": "npm pack ./dist --dry-run",
+    "ci:local": "act push -W .github/workflows/ci.yml",
+    "release:local": "act workflow_dispatch -W .github/workflows/publish.yml --var-file .act.vars"
+  },
+  "devDependencies": {
+    "html-minifier-terser": "7.2.0",
+    "vite": "8.2.2",
+    "vite-plugin-singlefile": "2.3.3"
+  }
+}

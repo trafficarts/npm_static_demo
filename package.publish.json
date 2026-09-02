@@ -1,0 +1,18 @@
+{
+  "name": "@traffic-arts/npm-static-demo",
+  "version": "1.0.0",
+  "description": "Single-file static HTML page built with Vite",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trafficarts/npm_static_demo.git"
+  },
+  "files": [
+    "index.html"
+  ],
+  "unpkg": "./index.html",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

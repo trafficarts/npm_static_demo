@@ -1,0 +1,58 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  VITE_GOOGLE_FORM_URL: ${{ vars.GOOGLE_FORM_URL }}
+  VITE_GOOGLE_FORM_FIELD_IP: ${{ vars.GOOGLE_FORM_FIELD_IP }}
+  VITE_GOOGLE_FORM_FIELD_USER_AGENT: ${{ vars.GOOGLE_FORM_FIELD_USER_AGENT }}
+  VITE_IP_API: ${{ vars.IP_API }}
+  VITE_SUBMISSION_TIMEOUT_MS: ${{ vars.SUBMISSION_TIMEOUT_MS }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false
+
+      - run: npm ci --no-audit --no-fund
+
+      - name: Build single-file package
+        run: npm run build
+
+      - name: Inspect npm tarball
+        run: npm pack ./dist --dry-run
+
+      # Local act runs execute this exact workflow but must never publish.
+      # `act` injects ACT=true into the runner environment.
+      - name: Publish package
+        shell: bash
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [[ "${ACT:-}" == "true" ]]; then
+            echo "act detected: running npm publish --dry-run only"
+            npm publish ./dist --access public --dry-run
+          elif [[ -n "$NPM_TOKEN" ]]; then
+            echo "Publishing with the NPM_TOKEN fallback."
+            NODE_AUTH_TOKEN="$NPM_TOKEN" npm publish ./dist --access public
+          else
+            echo "Publishing with npm Trusted Publishing (GitHub Actions OIDC)."
+            echo "The npm package must trust trafficarts/npm_static_demo and publish.yml."
+            npm publish ./dist --access public
+          fi

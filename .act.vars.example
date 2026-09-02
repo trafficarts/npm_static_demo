@@ -1,0 +1,5 @@
+GOOGLE_FORM_URL=https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse
+GOOGLE_FORM_FIELD_IP=entry.123456789
+GOOGLE_FORM_FIELD_USER_AGENT=entry.987654321
+IP_API=https://free.freeipapi.com/api/json
+SUBMISSION_TIMEOUT_MS=5000
